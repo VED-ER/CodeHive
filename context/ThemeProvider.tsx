@@ -17,15 +17,27 @@ export function useTheme() {
     return context;
 }
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [mode, setMode] = useState<"light" | "dark" | "system">("system");
-    const [theme, setTheme] = useState<"light" | "dark">(
-        localStorage?.theme === "dark" ||
+const getInitialTheme = () => {
+    console.log("11");
+
+    if (typeof window !== "undefined") {
+        if (
+            localStorage?.theme === "dark" ||
             (!("theme" in localStorage) &&
                 window.matchMedia("(prefers-color-scheme: dark)").matches)
-            ? "dark"
-            : "light"
-    );
+        ) {
+            return "dark";
+        } else {
+            return "light";
+        }
+    }
+};
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+    const [mode, setMode] = useState<"light" | "dark" | "system">("system");
+    const [theme, setTheme] = useState<"light" | "dark">(() => {
+        return getInitialTheme()!;
+    });
 
     const handleThemeChange = () => {
         if (
@@ -46,8 +58,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     };
 
     useEffect(() => {
-        console.log("in");
-
         handleThemeChange();
     }, [mode]);
 
