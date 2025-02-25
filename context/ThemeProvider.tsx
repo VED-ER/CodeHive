@@ -2,8 +2,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 type ThemeContextType = {
-    mode: "light" | "dark";
-    setMode: (mode: "light" | "dark") => void;
+    mode: "light" | "dark" | "system";
+    theme: "light" | "dark";
+    setMode: (mode: "light" | "dark" | "system") => void;
 };
 
 export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -17,25 +18,40 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [mode, setMode] = useState<"light" | "dark">("light");
+    const [mode, setMode] = useState<"light" | "dark" | "system">("system");
+    const [theme, setTheme] = useState<"light" | "dark">(
+        localStorage?.theme === "dark" ||
+            (!("theme" in localStorage) &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ? "dark"
+            : "light"
+    );
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
     const handleThemeChange = () => {
-        if (mode === "dark") {
-            setMode("light");
-            document.documentElement.classList.remove("dark");
-            document.documentElement.classList.add("light");
-        } else {
-            setMode("dark");
-            document.documentElement.classList.remove("light");
+        if (
+            !("theme" in localStorage && window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+            setMode("system");
+            setTheme("dark");
             document.documentElement.classList.add("dark");
+        } else if (localStorage.theme === "dark") {
+            setMode("dark");
+            setTheme("dark");
+            document.documentElement.classList.add("dark");
+        } else {
+            setMode("light");
+            setTheme("light");
+            document.documentElement.classList.remove("dark");
         }
     };
 
     useEffect(() => {
-        console.log("mode changed");
-        handleThemeChange();
-    }, []);
+        console.log("in");
 
-    return <ThemeContext.Provider value={{ mode, setMode }}>{children}</ThemeContext.Provider>;
+        handleThemeChange();
+    }, [mode]);
+
+    return (
+        <ThemeContext.Provider value={{ mode, setMode, theme }}>{children}</ThemeContext.Provider>
+    );
 }
