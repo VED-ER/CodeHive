@@ -1,6 +1,8 @@
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import GlobalSearch from "../search/GlobalSearch";
+import MobileNav from "./MobileNav";
 import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
@@ -13,6 +15,7 @@ const Navbar = () => {
                     Code<span className="text-primary-500">Hive</span>
                 </p>
             </Link>
+            <GlobalSearch />
             <div className="flex-between gap-5">
                 <ThemeToggle />
                 <SignedIn>
@@ -27,6 +30,7 @@ const Navbar = () => {
                         }}
                     />
                 </SignedIn>
+                <MobileNav />
             </div>
         </nav>
     );
