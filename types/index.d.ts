@@ -6,6 +6,27 @@ export interface SidebarLink {
     label: string;
 }
 
+export interface Tag {
+    _id: string;
+    name: string;
+}
+
+export interface Author {
+    _id: string;
+    name: string;
+    picture: string;
+}
+
+export interface Question {
+    _id: string;
+    title: string;
+    tags: Tag[];
+    author: Author;
+    upvotes: number;
+    views: number;
+    answers: Array<object>;
+    createdAt: Date;
+}
 export interface Job {
     id?: string;
     employer_name?: string;
