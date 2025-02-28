@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useTheme } from "@/context/ThemeProvider";
+import { createQuestion } from "@/lib/actions/question.action";
 import { questionSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Editor } from "@tinymce/tinymce-react";
@@ -22,9 +23,10 @@ import { Button } from "../ui/button";
 
 interface QuestionFormProps {
     edit?: boolean;
+    userId: string;
 }
 
-const QuestionForm = ({ edit }: QuestionFormProps) => {
+const QuestionForm = ({ edit, userId }: QuestionFormProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
 
@@ -49,8 +51,7 @@ const QuestionForm = ({ edit }: QuestionFormProps) => {
     async function onSubmit(values: z.infer<typeof questionSchema>) {
         setIsSubmitting(true);
         try {
-            console.log(values);
-
+            await createQuestion({ ...values, author: JSON.parse(userId) });
             router.push("/");
         } catch (error) {
             console.error(error);
