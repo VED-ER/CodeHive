@@ -51,7 +51,7 @@ const QuestionForm = ({ edit, userId }: QuestionFormProps) => {
     async function onSubmit(values: z.infer<typeof questionSchema>) {
         setIsSubmitting(true);
         try {
-            await createQuestion({ ...values, author: JSON.parse(userId) });
+            await createQuestion({ ...values, authorId: JSON.parse(userId) });
             router.push("/");
         } catch (error) {
             console.error(error);

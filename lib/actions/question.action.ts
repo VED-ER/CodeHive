@@ -2,18 +2,36 @@
 
 import Question from "@/database/models/question.model";
 import Tag from "@/database/models/tag.model";
+import User from "@/database/models/user.model";
 import { connectToDatabase } from "../mongodb-connect";
+import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
 
-export async function createQuestion(params: any) {
+export async function fetchQuestions(_params: GetQuestionsParams) {
     try {
-        connectToDatabase();
+        await connectToDatabase();
 
-        const { title, explanation, tags, author, _path } = params;
+        const questions = Question.find({})
+            .populate({ path: "tags", model: Tag })
+            .populate({ path: "author", model: User })
+            .sort({ createdAt: -1 });
+
+        return questions;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export async function createQuestion(params: CreateQuestionParams) {
+    try {
+        await connectToDatabase();
+
+        const { title, explanation, tags, authorId } = params;
 
         const question = await Question.create({
             title,
             explanation,
-            author,
+            author: authorId,
         });
 
         const tagDocuments = [];
