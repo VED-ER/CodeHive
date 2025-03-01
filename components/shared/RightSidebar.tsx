@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Tag from "../Tag";
 
 const hotQuestions = [
@@ -22,39 +23,45 @@ const popularTags = [
 
 const RightSidebar = () => {
     return (
-        <section className="background-light900_dark200 light-border custom-scrollbar sticky right-0 top-0 flex h-screen flex-col justify-between overflow-y-auto border-l p-6 pt-36 shadow-light-300 dark:shadow-none max-xl:hidden xl:w-[330px] 2xl:w-[370px]">
+        <section className="background-light900_dark200 light-border custom-scrollbar sticky right-0 top-0 flex h-screen flex-col justify-between overflow-y-auto border-l p-3 pt-36 shadow-light-300 dark:shadow-none max-xl:hidden xl:w-[330px] 2xl:w-[370px]">
             <div className="flex flex-col">
                 <div>
                     <h3 className="h3-bold text-dark200_light900">Hot Questions</h3>
-                    <div className="mt-7 flex w-full flex-col gap-[30px]">
+                    <div className="mt-7 flex w-full flex-col gap-5">
                         {hotQuestions.map((question, index) => (
-                            <div key={question._id} className="flex items-center gap-4">
-                                <Image
-                                    src={
-                                        (index + 1) % 2
-                                            ? "/assets/icons/questionmark-square-hot.svg"
-                                            : "/assets/icons/questionmark-square-cold.svg"
-                                    }
-                                    alt={"questionmark"}
-                                    width={24}
-                                    height={24}
-                                    className="h-6 w-6"
-                                />
-                                <p className="text-dark500_light700">{question.title}</p>
-                                <Image
-                                    src="/assets/icons/chevron-right.svg"
-                                    alt={"questionmark"}
-                                    width={20}
-                                    height={20}
-                                    className="invert-colors"
-                                />
-                            </div>
+                            <Link
+                                key={question._id}
+                                href={"/"}
+                                className="hover:background-light800_dark400 rounded-lg p-3"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <Image
+                                        src={
+                                            (index + 1) % 2
+                                                ? "/assets/icons/questionmark-square-hot.svg"
+                                                : "/assets/icons/questionmark-square-cold.svg"
+                                        }
+                                        alt={"questionmark"}
+                                        width={24}
+                                        height={24}
+                                        className="h-6 w-6"
+                                    />
+                                    <p className="text-dark500_light700">{question.title}</p>
+                                    <Image
+                                        src="/assets/icons/chevron-right.svg"
+                                        alt={"questionmark"}
+                                        width={20}
+                                        height={20}
+                                        className="invert-colors"
+                                    />
+                                </div>
+                            </Link>
                         ))}
                     </div>
                 </div>
                 <div className="mt-16">
                     <h3 className="h3-bold text-dark200_light900">Popular Tags</h3>
-                    <div className="mt-7 flex w-full flex-col gap-[30px]">
+                    <div className="mt-7 flex w-full flex-col gap-5">
                         {popularTags.map((tag) => (
                             <Tag
                                 key={tag._id}
@@ -62,6 +69,7 @@ const RightSidebar = () => {
                                 name={tag.name}
                                 totalQuestions={tag.totalQuestions}
                                 showCount
+                                className="hover:background-light800_dark400 items-center rounded-lg p-3"
                             />
                         ))}
                     </div>
